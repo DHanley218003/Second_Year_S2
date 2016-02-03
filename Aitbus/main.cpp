@@ -39,21 +39,23 @@ void main()
 	{
 		ClearScreen();
 		printf("Please select an option:\n1: print map of seats\n2: print seat details\n3: add a passenger\n4: remove a passenger\n5: Autoassign a seat\n6: reset seats\n0: exit program\n");
-		scanf("%d", &menu);
-		if(menu == 0)
-			break;
-		else if(menu == 1)
-			ShowSeats(seats);
-		else if(menu == 2)
-			ShowDetails(seats);
-		else if(menu == 3)
-			AddPassenger(seats);
-		else if(menu == 4)
-			RemovePassenger(seats);
-		else if(menu == 5)
-			AutoAssign(seats);
-		else if(menu == 6)
-			Reset(seats);
+		if (scanf("%d", &menu))
+		{
+			if (menu == 0)
+				break;
+			else if (menu == 1)
+				ShowSeats(seats);
+			else if (menu == 2)
+				ShowDetails(seats);
+			else if (menu == 3)
+				AddPassenger(seats);
+			else if (menu == 4)
+				RemovePassenger(seats);
+			else if (menu == 5)
+				AutoAssign(seats);
+			else if (menu == 6)
+				Reset(seats);
+		}
 	}
 }
 
@@ -77,16 +79,23 @@ void RemovePassenger(unsigned int y[17][4]) // unassigns a selected seat
 		
 		ShowDetails(y);
 		printf("Please enter an seat number to remove.\n");
-		scanf("%d",&temp);
-		if(temp < 0)
-			break;
-		else if(y[temp][1])
+		if (scanf("%d", &temp))
 		{
-			y[temp][1] = 0;
-			printf("Seat Removed! Please enter another seat number or enter -1 to quit.\n");
+			if (temp < 0)
+				break;
+			else if (y[temp][1])
+			{
+				y[temp][1] = 0;
+				printf("Seat Removed! Please enter another seat number or enter -1 to quit.\n");
+			}
+			else
+				printf("That seat is empty, please enter another seat or -1 to quit.\n");
 		}
 		else
-			printf("That seat is empty, please enter another seat or -1 to quit.\n");
+		{
+			ClearScreen();
+			printf("Please enter a number!");
+		}
 	}
 }
 
@@ -97,15 +106,21 @@ void AddPassenger(unsigned int y[17][4]) // assigns a selected seat
 	while(true)
 	{
 		printf("Please enter an seat number to add.\n");
-		scanf("%d",&temp);
-		if(temp < 0)
-			break;
-		else if(y[temp][1])
-			printf("That seat is taken, please select another or enter -1 to quit.\n");
+		if (scanf("%d", &temp))
+		{
+			if (temp < 0)
+				break;
+			else if (y[temp][1])
+				printf("That seat is taken, please select another or enter -1 to quit.\n");
+			else
+			{
+				y[temp][1] = 1;
+				printf("Seat added! Please enter another seat number or enter -1 to quit.\n");
+			}
+		}
 		else
 		{
-			y[temp][1] = 1;
-			printf("Seat added! Please enter another seat number or enter -1 to quit.\n");
+			printf("Please enter a number!");
 		}
 	}
 }
@@ -213,7 +228,7 @@ void ShowSeats(unsigned int y[17][4])
 void ClearScreen()
 {
 	if(os)//if linux
-		system("clear");
+		std::cout << "\033[2J\033[1;1H";
 	else//windows
 		system("cls");
 }
