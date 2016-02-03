@@ -81,7 +81,7 @@ void ShowSeats(bool s[])
 			{
 				if(j == 2)// tab to create aisle
 					printf("\t");
-				if(!(s[scount]))//if a seat is occupied
+				if(s[scount])//if a seat is occupied
 					printf("%c ", 219);
 				scount++;
 			}
@@ -103,7 +103,7 @@ void ShowSeats(bool s[])
 	{
 		if(j == 2)// tab to create aisle
 			printf("\t");
-		if(!(s[scount]))//if a seat is occupied
+		if(s[scount])//if a seat is occupied
 			printf("%c ", 219);
 		scount++;
 	}
