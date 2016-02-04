@@ -20,9 +20,14 @@
 
 #include <stdio.h>
 #include <iostream>
+#include <string.h>
 
-unsigned int seats[17][4]; // used for price calculation, if seat is reserved and seat class.
+//Global variables
+unsigned int seatsx, seatsy;
+bool *seats[][] = new bool[][];// used for price calculation, if seat is reserved and seat class.
+char names[40][2];
 
+//function prototypes
 void Reset(unsigned int y[17][4]);
 void ShowSeats(unsigned int y[17][4]);
 void ClearScreen();
