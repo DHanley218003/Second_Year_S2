@@ -1,5 +1,5 @@
 /*
- * main.cpp version 1.0.0
+ * main.cpp version 2.0.0
  * A program for allocating seats on a 17 seat aircraft
  * Created on: Jan 20, 2016
  * Author: A00218003
@@ -22,24 +22,65 @@
 #include <iostream>
 #include <string.h>
 
-//Global variables
-unsigned int seatsx, seatsy;
-bool *seats[][] = new bool[][];// used for price calculation, if seat is reserved and seat class.
-char names[40][2];
+//Classes
+class Seat
+{
+	std::string name;
+	char type;
+	void setName(std::string x)
+	{
+		name = x;
+	}
+	void setName()
+	{
+		printf("Please enter your full name: ");
+		std::string x;
+		scanf("%s", &x);
+		name = x;
+	}
+	bool setType(char x)
+	{
+		if (x == 'E' || x == 'B' || x == 'F' || x == 'D')
+		{
+			type = x;
+			return true;
+		}
+		else
+			return false;
+	}
+	std::string getName()
+	{
+		return name;
+	}
+	char getType()
+	{
+		return type;
+	}
+};
 
 //function prototypes
-void Reset(unsigned int y[17][4]);
-void ShowSeats(unsigned int y[17][4]);
+void Reset();
+void ShowSeats();
 void ClearScreen();
-void ShowDetails(unsigned int s[17][4]);
-void AddPassenger(unsigned int y[17][4]);
-void RemovePassenger(unsigned int y[17][4]);
-void AutoAssign(unsigned int y[17][4]);
+void ShowDetails();
+void AddPassenger();
+void RemovePassenger();
+void AutoAssign();
 
 void main()
 {
 	int menu = -1;
-	Reset( seats);
+	char type;
+	unsigned int input;
+	//load seats from file here
+	Seat seats[input];
+	char input;
+	for (unsigned int i = 0; i < hasNext(); i++)
+	{
+		
+		type = input;
+		input.setType(type);
+	}
 	while(true)
 	{
 		ClearScreen();
@@ -49,48 +90,47 @@ void main()
 			if (menu == 0)
 				break;
 			else if (menu == 1)
-				ShowSeats(seats);
+				ShowSeats();
 			else if (menu == 2)
-				ShowDetails(seats);
+				ShowDetails();
 			else if (menu == 3)
-				AddPassenger(seats);
+				AddPassenger();
 			else if (menu == 4)
-				RemovePassenger(seats);
+				RemovePassenger();
 			else if (menu == 5)
-				AutoAssign(seats);
+				AutoAssign();
 			else if (menu == 6)
-				Reset(seats);
+				Reset();
 		}
 	}
 }
 
-void AutoAssign(unsigned int y[17][4]) //Finds the first free seat and assigns it
+void AutoAssign(seats) //Finds the first free seat and assigns it
 {
-	for(unsigned int i = 0; i < 16; i++)
+	for(unsigned int i = 0; i < seats.sizeof; i++)
 	{
-		if(!(y[i][1]))
+		if (seats[i].getName == "")
 		{
-			y[i][1] = 1;
-			break;
+			seats[i].setName();
 		}
 	}
 }
 
-void RemovePassenger(unsigned int y[17][4]) // unassigns a selected seat
+void RemovePassenger(seats) // unassigns a selected seat
 {
 	int temp;
 	while(true)
 	{
 		
-		ShowDetails(y);
+		ShowDetails(seats);
 		printf("Please enter an seat number to remove.\n");
 		if (scanf("%d", &temp))
 		{
 			if (temp < 0)
 				break;
-			else if (y[temp][1])
+			else if (seats[temp].getName() == "")
 			{
-				y[temp][1] = 0;
+				seats[temp].setName();
 				printf("Seat Removed! Please enter another seat number or enter -1 to quit.\n");
 			}
 			else
@@ -104,10 +144,10 @@ void RemovePassenger(unsigned int y[17][4]) // unassigns a selected seat
 	}
 }
 
-void AddPassenger(unsigned int y[17][4]) // assigns a selected seat
+void AddPassenger(seats) // assigns a selected seat
 {
 	int temp;
-	ShowDetails(y);
+	ShowDetails(seats);
 	while(true)
 	{
 		printf("Please enter an seat number to add.\n");
@@ -115,11 +155,11 @@ void AddPassenger(unsigned int y[17][4]) // assigns a selected seat
 		{
 			if (temp < 0)
 				break;
-			else if (y[temp][1])
+			else if (seats[temp].getName == "")
 				printf("That seat is taken, please select another or enter -1 to quit.\n");
 			else
 			{
-				y[temp][1] = 1;
+				seats[temp].setName();
 				printf("Seat added! Please enter another seat number or enter -1 to quit.\n");
 			}
 		}
@@ -130,7 +170,7 @@ void AddPassenger(unsigned int y[17][4]) // assigns a selected seat
 	}
 }
 
-void ShowDetails(unsigned int s[17][4]) // shows a detailed list of the seats
+void ShowDetails(seats) // shows a detailed list of the seats
 {
 	ClearScreen();
 	printf("Seat Number |\t Reserved |\t Seat Class\n"); //Table heading
