@@ -1,24 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>MainWindow</class>
- <widget class="QMainWindow" name="MainWindow" >
-  <property name="geometry" >
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>355</width>
+    <height>339</height>
    </rect>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>MainWindow</string>
   </property>
-  <widget class="QMenuBar" name="menuBar" />
-  <widget class="QToolBar" name="mainToolBar" />
-  <widget class="QWidget" name="centralWidget" />
-  <widget class="QStatusBar" name="statusBar" />
+  <widget class="QWidget" name="centralWidget">
+   <widget class="QPushButton" name="seatDetails">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>101</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Show seat details</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="autoAssign">
+    <property name="geometry">
+     <rect>
+      <x>130</x>
+      <y>10</y>
+      <width>101</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Auto-assign seat</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="Reset">
+    <property name="geometry">
+     <rect>
+      <x>250</x>
+      <y>10</y>
+      <width>101</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Reset seats</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="passengername">
+    <property name="geometry">
+     <rect>
+      <x>90</x>
+      <y>60</y>
+      <width>181</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="placeholderText">
+     <string>Enter full passenger name here.</string>
+    </property>
+    <property name="clearButtonEnabled">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QGraphicsView" name="seatLayout">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>90</y>
+      <width>256</width>
+      <height>192</height>
+     </rect>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>355</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="file">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="loadMap"/>
+    <addaction name="loadSeats"/>
+    <addaction name="saveSeats"/>
+    <addaction name="saveAs"/>
+    <addaction name="exit"/>
+   </widget>
+   <widget class="QMenu" name="edit">
+    <property name="title">
+     <string>Edit</string>
+    </property>
+    <addaction name="assignSeats"/>
+    <addaction name="removeSeats"/>
+   </widget>
+   <addaction name="file"/>
+   <addaction name="edit"/>
+  </widget>
+  <widget class="QToolBar" name="mainToolBar">
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+  <action name="loadMap">
+   <property name="text">
+    <string>Load seatmap</string>
+   </property>
+  </action>
+  <action name="loadSeats">
+   <property name="text">
+    <string>Load seats</string>
+   </property>
+  </action>
+  <action name="saveSeats">
+   <property name="text">
+    <string>Save</string>
+   </property>
+  </action>
+  <action name="saveAs">
+   <property name="text">
+    <string>Save as</string>
+   </property>
+  </action>
+  <action name="exit">
+   <property name="text">
+    <string>Exit</string>
+   </property>
+  </action>
+  <action name="assignSeats">
+   <property name="text">
+    <string>Assign seat</string>
+   </property>
+  </action>
+  <action name="removeSeats">
+   <property name="text">
+    <string>Remove seat</string>
+   </property>
+  </action>
  </widget>
- <layoutDefault spacing="6" margin="11" />
- <pixmapfunction></pixmapfunction>
+ <layoutdefault spacing="6" margin="11"/>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>seatDetails</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>seatLayout</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>60</x>
+     <y>63</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>177</x>
+     <y>218</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

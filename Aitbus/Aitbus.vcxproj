@@ -27,6 +27,9 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Disabled</Optimization>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="default.txt" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{BD3313CD-5ABD-40F3-BDE6-5D5DA869E77D}</ProjectGuid>
     <RootNamespace>Aitbus</RootNamespace>

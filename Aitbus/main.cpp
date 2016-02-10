@@ -1,5 +1,5 @@
 /*
- * main.cpp version 2.0.0
+ * main.cpp version 0.4.0
  * A program for allocating seats on a 17 seat aircraft
  * Created on: Jan 20, 2016
  * Author: A00218003
@@ -10,6 +10,7 @@
  * Modify array to deal with seating arrangement
  * Add customer seat type, e.g. Aductl/Child/Student/Disabled
  */
+
 //What os is used? Used to determine screen clear command
 #ifdef __linux__
 	bool os = true;
@@ -21,26 +22,30 @@
 #include <stdio.h>
 #include <iostream>
 #include <string.h>
+#include <fstream>
 
 //Classes
-class Seat
+class Seat // airline seat
 {
-	std::string name;
-	char type;
-	void setName(std::string x)
+	std::string name; // passenger name
+	char type; // seat type
+
+	void setName(std::string x) // takes in passenger name and sets it
 	{
 		name = x;
 	}
-	void setName()
+
+	void setName() // Alternative for cli
 	{
 		printf("Please enter your full name: ");
 		std::string x;
 		scanf("%s", &x);
 		name = x;
 	}
-	bool setType(char x)
+
+	bool setType(char x) // takes in a capital letter to set as a seat type, returns true if correct letter was inputted
 	{
-		if (x == 'E' || x == 'B' || x == 'F' || x == 'D')
+		if (x == 'E' || x == 'B' || x == 'F' || x == 'D' || x == 'X') // Economy, Business, First class, Disabled, No seat
 		{
 			type = x;
 			return true;
@@ -48,15 +53,21 @@ class Seat
 		else
 			return false;
 	}
-	std::string getName()
+	std::string getName() // returns the seat passenger name
 	{
 		return name;
 	}
-	char getType()
+	char getType() // returns the seat type
 	{
 		return type;
 	}
 };
+
+Seat* SeatArray(int size)
+{
+	Seat* x = new Seat[size];
+	return x;
+}
 
 //function prototypes
 void Reset();
@@ -71,7 +82,24 @@ void main()
 {
 	int menu = -1;
 	char type;
-	unsigned int input;
+	std::string input;
+	std::fstream inStream;
+	try
+	{
+		inStream.open("default.txt", ios::out);
+		if (inStream.is_open)
+		{
+			while (inStream.getline)
+			{
+				int rowWidth = inStream.in;
+				Seat* seatRow = SeatArray(rowWidth);
+			}
+		}
+	}
+	catch (_exception e)
+	{
+		printf("Unable to open file: %s", &e);
+	}
 	//load seats from file here
 	Seat seats[input];
 	char input;
