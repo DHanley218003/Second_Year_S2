@@ -18,81 +18,42 @@
 	bool os = false;
 	#define _CRT_SECURE_NO_WARNINGS
 #endif
+#define ARRAY_SIZE(array) (sizeof((array))/sizeof((array[0])))
+
+template <typename T,unsigned S>
+inline unsigned arraysize(const T (&v)[S]) { return S; }
 
 #include <stdio.h>
 #include <iostream>
 #include <string.h>
 #include <fstream>
-
-//Classes
-class Seat // airline seat
-{
-	std::string name; // passenger name
-	char type; // seat type
-
-	void setName(std::string x) // takes in passenger name and sets it
-	{
-		name = x;
-	}
-
-	void setName() // Alternative for cli
-	{
-		printf("Please enter your full name: ");
-		std::string x;
-		scanf("%s", &x);
-		name = x;
-	}
-
-	bool setType(char x) // takes in a capital letter to set as a seat type, returns true if correct letter was inputted
-	{
-		if (x == 'E' || x == 'B' || x == 'F' || x == 'D' || x == 'X') // Economy, Business, First class, Disabled, No seat
-		{
-			type = x;
-			return true;
-		}
-		else
-			return false;
-	}
-	std::string getName() // returns the seat passenger name
-	{
-		return name;
-	}
-	char getType() // returns the seat type
-	{
-		return type;
-	}
-};
-
-Seat* SeatArray(int size)
-{
-	Seat* x = new Seat[size];
-	return x;
-}
+#include "Seats.h"
+#include <vector>
 
 //function prototypes
-void Reset();
-void ShowSeats();
-void ClearScreen();
-void ShowDetails();
-void AddPassenger();
-void RemovePassenger();
-void AutoAssign();
+void Reset(Seat slth, Seat swth);
+void ShowSeats(Seat slth, Seat swth);
+void ClearScreen(Seat slth, Seat swth);
+void ShowDetails(Seat slth, Seat swth);
+void AddPassenger(Seat slth, Seat swth);
+void RemovePassenger(Seat slth, Seat swth);
+void AutoAssign(Seat slth, Seat swth);
 
 void main()
 {
 	int menu = -1;
 	char type;
-	std::string input;
+	unsigned int seatLength = 0;
+	unsigned int seatWidth = 0;
 	std::fstream inStream;
 	try
 	{
-		inStream.open("default.txt", ios::out);
+		inStream.open("default.txt", std::ios::out);
 		if (inStream.is_open)
 		{
 			while (inStream.getline)
 			{
-				int rowWidth = inStream.in;
-				Seat* seatRow = SeatArray(rowWidth);
+				
 			}
 		}
 	}
@@ -101,13 +62,15 @@ void main()
 		printf("Unable to open file: %s", &e);
 	}
 	//load seats from file here
-	Seat seats[input];
+	std::vector<Seat> seatLth(seatLength, Seat());
+	std::vector<Seat> seatWth(seatWidth, Seat());
 	char input;
-	for (unsigned int i = 0; i < hasNext(); i++)
+	for (unsigned int i = 0; input; i++)
 	{
 		
 		type = input;
-		input.setType(type);
+		seatLth[i].setType(type);
+		seatWth[i].setType(type);
 	}
 	while(true)
 	{
@@ -118,33 +81,33 @@ void main()
 			if (menu == 0)
 				break;
 			else if (menu == 1)
-				ShowSeats();
+				ShowSeats(*seatLth, *seatWth);
 			else if (menu == 2)
-				ShowDetails();
+				ShowDetails(*seatLth, *seatWth);
 			else if (menu == 3)
-				AddPassenger();
+				AddPassenger(*seatLth, *seatWth);
 			else if (menu == 4)
-				RemovePassenger();
+				RemovePassenger(*seatLth, *seatWth);
 			else if (menu == 5)
-				AutoAssign();
+				AutoAssign(*seatLth, *seatWth);
 			else if (menu == 6)
-				Reset();
+				Reset(*seatLth, *seatWth);
 		}
 	}
 }
 
-void AutoAssign(seats) //Finds the first free seat and assigns it
+void AutoAssign(Seat *slth, Seat *swth) //Finds the first free seat and assigns it
 {
-	for(unsigned int i = 0; i < seats.sizeof; i++)
+	for(unsigned int i = 0; i < arraysize(slth); i++)
 	{
-		if (seats[i].getName == "")
+		if (slth[i].getName == "")
 		{
-			seats[i].setName();
+			slth[i].setName();
 		}
 	}
 }
 
-void RemovePassenger(seats) // unassigns a selected seat
+void RemovePassenger(Seat slth, Seat swth) // unassigns a selected seat
 {
 	int temp;
 	while(true)
@@ -172,7 +135,7 @@ void RemovePassenger(seats) // unassigns a selected seat
 	}
 }
 
-void AddPassenger(seats) // assigns a selected seat
+void AddPassenger(Seat slth, Seat swth) // assigns a selected seat
 {
 	int temp;
 	ShowDetails(seats);
@@ -198,7 +161,7 @@ void AddPassenger(seats) // assigns a selected seat
 	}
 }
 
-void ShowDetails(seats) // shows a detailed list of the seats
+void ShowDetails(Seat slth, Seat swth) // shows a detailed list of the seats
 {
 	ClearScreen();
 	printf("Seat Number |\t Reserved |\t Seat Class\n"); //Table heading
@@ -231,7 +194,7 @@ void ShowDetails(seats) // shows a detailed list of the seats
 	std::cin >> temp;//rather than system("pause");, which would crash in linux
 }
 
-void Reset(unsigned int y[17][4])
+void Reset(Seat slth, Seat swth)
 {
 	// Resets 2d array of: seat number, reservation flag, seat class(0,1,2)
 	for(unsigned int i = 0;i < 16; i++)
@@ -255,7 +218,7 @@ void Reset(unsigned int y[17][4])
 	printf("Seats reset.\n");
 }
 
-void ShowSeats(unsigned int y[17][4])
+void ShowSeats(Seat slth, Seat swth)
 {
 	ClearScreen();
 	int ncount = 0;//used for seat numbering
