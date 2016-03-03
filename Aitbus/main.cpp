@@ -18,11 +18,6 @@
 	bool os = false;
 	#define _CRT_SECURE_NO_WARNINGS
 #endif
-#define ARRAY_SIZE(array) (sizeof((array))/sizeof((array[0])))
-
-template <typename T,unsigned S>
-inline unsigned arraysize(const T (&v)[S]) { return S; }
-
 #include <stdio.h>
 #include <iostream>
 #include <string.h>
@@ -31,19 +26,19 @@ inline unsigned arraysize(const T (&v)[S]) { return S; }
 #include <vector>
 
 //function prototypes
-void Reset(std::vector<std::vector<Seat*>>);
-void ShowSeats(std::vector<std::vector<Seat*>>);
+void Reset(Seat **seats);
+void ShowSeats(Seat **seats);
 void ClearScreen();
-void ShowDetails(std::vector<std::vector<Seat*>>);
-void AddPassenger(std::vector<std::vector<Seat*>>);
-void RemovePassenger(std::vector<std::vector<Seat*>>);
-void AutoAssign(std::vector<std::vector<Seat*>>);
-std::vector<std::vector<Seat*>> loadFile();
+void ShowDetails(Seat **seats);
+void AddPassenger(Seat **seats);
+void RemovePassenger(Seat **seats);
+void AutoAssign(Seat **seats);
+Returner loadFile();
 
 void main()
 {
 	int menu = -1;
-	std::vector<std::vector<Seat*>> seats;// = loadFile();
+	Returner x = loadFile();
 
 	while(true)
 	{
@@ -54,35 +49,69 @@ void main()
 			if (menu == 0)
 				break;
 			else if (menu == 1)
-				ShowSeats(seats);
+				ShowSeats(x);
 			else if (menu == 2)
-				ShowDetails(seats);
+				ShowDetails(x);
 			else if (menu == 3)
-				AddPassenger(seats);
+				AddPassenger(x);
 			else if (menu == 4)
-				RemovePassenger(seats);
+				RemovePassenger(x);
 			else if (menu == 5)
-				AutoAssign(seats);
+				AutoAssign(x);
 			else if (menu == 6)
-				Reset(seats);
+				Reset(x);
 		}
 	}
+	delete[] seats;
 }
 
-std::vector<std::vector<Seat*>> loadFile()
+
+struct Returner
 {
+public:
+	Seat ** temp1;
+	unsigned int tempRow;
+	unsigned int tempColumn;
+};
+
+Returner loadFile()
+{
+	std::string temp;
+	std::string name;
 	char type;
-	unsigned int seatLength = 0;
-	unsigned int seatWidth = 0;
+	unsigned int seatRow = 0;
+	unsigned int seatColumn = 0;
 	std::fstream inStream;
 	try
 	{
 		inStream.open("default.txt", std::ios::out);
 		if (inStream.is_open)
 		{
+			seatRow = inStream.getline; // get seat row length from the first line
+			seatColumn = inStream.getline; // get seat column length from the second line
+			Seat **seats = new Seat*[seatRow];  // initialise the row
+			for (int i = 0; i < seatRow; ++i)
+				seats[i] = new Seat[seatColumn]; // initialise the columns
+
 			while (inStream.getline)
 			{
-				
+				temp = inStream.getline; // gets the next line for processing
+				for(int i = 0; i < temp.size()-1; i++)
+				{
+					if(temp[i, i+1] == ' ') // detects a space
+					{
+						name = temp[0,i]; // everything up to the space is a name!
+						type = temp[i+1,i+2]; // therefore after the space is the seat type
+					}
+				}
+				for(int i = 0; i < seatRow; i++)
+				{
+					for(int j = 0; j < seatColumn; j++)
+					{
+						seats[i][j].setName(name); // set the name(if exists) to the seat
+						seats[i][j].setType(type); // set the seat type (should exist!)
+					}
+				}
 			}
 		}
 	}
@@ -91,76 +120,53 @@ std::vector<std::vector<Seat*>> loadFile()
 		printf("Unable to open file: %s", &e);
 	}
 	//load seats from file here
-	std::vector< std::vector<Seat*> > seats;
-	seats.resize(seatLength, std::vector<Seat*>(seatWidth,0));
-	char input;
-	for (unsigned int i = 0; input; i++)
-	{
-		for (unsigned int j = 0; input; j++)
-		{
-			type = input;
-			seats[i][j];
-		}
-	}
-	return seats;
+	Returner x;
+	x.temp1 = seats;
+	x.tempColumn = seatColumn;
+	x.tempRow = seatRow;
+	return x;
 }
 
-void AutoAssign(std::vector<std::vector<Seat*>> seats) //Finds the first free seat and assigns it
+void AutoAssign(Seat **seats) //Finds the first free seat and assigns it
 {
-	for(unsigned int i = 0; i < seats.size(); i++)
+	for(unsigned int i = 0; i < seats; i++)
 	{
-		if (seats[i].getName == "")
+		for(unsigned int j = 0; j < seats; j++)
 		{
-			seats[i].setName();
-		}
-	}
-}
-
-void RemovePassenger(std::vector<std::vector<Seat*>> seats) // unassigns a selected seat
-{
-	int temp;
-	while(true)
-	{
-		
-		ShowDetails(seats);
-		printf("Please enter an seat number to remove.\n");
-		if (scanf("%d", &temp))
-		{
-			if (temp < 0)
-				break;
-			else if (seats[temp].getName() == "")
+			if (seats[i][j].getName == "")
 			{
-				seats[temp].setName();
-				printf("Seat Removed! Please enter another seat number or enter -1 to quit.\n");
+				seats[i][j].setName();
+				break;
 			}
-			else
-				printf("That seat is empty, please enter another seat or -1 to quit.\n");
-		}
-		else
-		{
-			ClearScreen();
-			printf("Please enter a number!");
 		}
 	}
 }
 
-void AddPassenger(std::vector<std::vector<Seat*>> seats) // assigns a selected seat
+void RemovePassenger(Seat **seats) // unassigns a selected seat
 {
-	int temp;
+	int tempc, tempr;
 	ShowDetails(seats);
 	while(true)
 	{
-		printf("Please enter an seat number to add.\n");
-		if (scanf("%d", &temp))
+		printf("Please enter an seat column to remove.\n");
+		if (scanf("%d", &tempc))
 		{
-			if (temp < 0)
-				break;
-			else if (seats[temp].getName == "")
-				printf("That seat is taken, please select another or enter -1 to quit.\n");
+			printf("Please enter an seat column to remove.\n");
+			if (scanf("%d", &tempr))
+			{
+				if (tempc < 0 || tempr < 0)
+					break;
+				else if (seats[tempc][tempr].getName() == "")
+					printf("That seat is empty, please select another or enter -1 to quit.\n");
+				else
+				{
+					seats[tempc][tempr].setName("");
+					printf("Seat removed! Please enter another seat number or enter -1 to quit.\n");
+				}
+			}
 			else
 			{
-				seats[temp].setName();
-				printf("Seat added! Please enter another seat number or enter -1 to quit.\n");
+				printf("Please enter a number!");
 			}
 		}
 		else
@@ -170,85 +176,71 @@ void AddPassenger(std::vector<std::vector<Seat*>> seats) // assigns a selected s
 	}
 }
 
-void ShowDetails(std::vector<std::vector<Seat*>> seats) // shows a detailed list of the seats
+void AddPassenger(Seat **seats) // assigns a selected seat
+{
+	int tempc, tempr;
+	ShowDetails(seats);
+	while(true)
+	{
+		printf("Please enter an seat column to add.\n");
+		if (scanf("%d", &tempc))
+		{
+			printf("Please enter an seat column to add.\n");
+			if (scanf("%d", &tempr))
+			{
+				if (tempc < 0 || tempr < 0)
+					break;
+				else if (seats[tempc][tempr].getName == "")
+					printf("That seat is taken, please select another or enter -1 to quit.\n");
+				else
+				{
+					seats[tempc][tempr].setName();
+					printf("Seat added! Please enter another seat number or enter -1 to quit.\n");
+				}
+			}
+			else
+			{
+				printf("Please enter a number!");
+			}
+		}
+		else
+		{
+			printf("Please enter a number!");
+		}
+	}
+}
+
+void ShowDetails(Seat **seats) // shows a detailed list of the seats
 {
 	ClearScreen();
-	for (unsigned int i = 0; i < seats.size(); i++)
+	for(int i = 0; i < seats;i++)
 	{
-		if (i < seats.size())
+		for(int j = 0; j < seats;j++)
 		{
-			printf("%s", seats[i].getName());
-			printf("%c", seats[i].getType());
+			printf("Name: %s Type: %c", seats[i][j].getName, seats[i][j].getType);
 		}
 	}
 	std::cin;//rather than system("pause");, which would crash in linux
 }
 
-void Reset(std::vector<std::vector<Seat*>> seats)
+void Reset(Seat **seats)
 {
 	// Resets 2d array of: seat number, reservation flag, seat class(0,1,2)
-	for(unsigned int i = 0;i < 16; i++)
+	for(int i = 0; i < seats;i++)
 	{
-		for(unsigned int j = 1; j < 3; j++)
+		for(int j = 0; j < seats;j++)
 		{
-			if(j == 2)//last int in array used to determine seat class
-			{
-				if(i > 13)// first class
-					y[i][j] = 2;
-				else if(i > 10)// business class
-					y[i][j] = 1;
-				else// economy class
-					y[i][j] = 0;
-			}
-			else
-				y[i][j] = 0;
+			seats[i][j].setName("");
 		}
-		y[i][0] = i;
 	}
 	printf("Seats reset.\n");
 }
 
-void ShowSeats(std::vector<std::vector<Seat*>> seats)
+void ShowSeats(Seat **seats)
 {
 	ClearScreen();
-	int ncount = 0;//used for seat numbering
-	int scount = 0;
-	for(unsigned int i = 0; i < 9; i++)
-	{
-		if(i % 2)//print numbers or blocks?
-		{
-			for(unsigned int j = 0; j < 4; j++)//blocks
-			{
-				if(j == 2)// tab to create aisle
-					printf("\t");
-				if(y[scount][1])//if a seat is occupied
-					printf("%c ", 219);
-				scount++;
-			}
-		}
-		else
-		{
-			for(unsigned int j = 0; j < 4; j++)//numbers
-			{
-				if(j == 2)// tab to create aisle
-					printf("\t");
-				printf("%d ",ncount);
-				ncount++;
-			}
-			
-		}
-		printf("\n");
-	}
-	for(unsigned int j = 0; j < 4; j++)// Prints last row of blocks
-	{
-		if(j == 2)// tab to create aisle
-			printf("\t");
-		if(y[scount][1])//if a seat is occupied
-			printf("%c ", 219);
-		scount++;
-	}
-	printf("\nEnter a number to continue\n");
-	std::cin >> ncount;//rather than system("pause");, which would crash in linux
+	
+	std::cin;//rather than system("pause");, which would crash in linux
 }
 
 void ClearScreen()
