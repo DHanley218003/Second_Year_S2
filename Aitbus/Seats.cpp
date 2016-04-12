@@ -6,14 +6,6 @@ void Seat::setName(std::string x) // takes in passenger name and sets it
 		name = x;
 	}
 
-void Seat::setName() // Alternative for cli
-	{
-		printf("Please enter your full name: ");
-		std::string x;
-		scanf("%s", &x);
-		name = x;
-	}
-
 bool Seat::setType(char x) // takes in a capital letter to set as a seat type, returns true if correct letter was inputted
 	{
 		if (x == 'E' || x == 'B' || x == 'F' || x == 'D' || x == 'X') // Economy, Business, First class, Disabled, No seat
