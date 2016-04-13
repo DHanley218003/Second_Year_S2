@@ -18,22 +18,6 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Level3</WarningLevel>
-      <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">EnableFastChecks</BasicRuntimeChecks>
-      <ExceptionHandling Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Sync</ExceptionHandling>
-      <MultiProcessorCompilation Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</MultiProcessorCompilation>
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Disabled</Optimization>
-    </ClCompile>
-    <ClCompile Include="Seats.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="default.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Seats.h" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{BD3313CD-5ABD-40F3-BDE6-5D5DA869E77D}</ProjectGuid>
     <RootNamespace>Aitbus</RootNamespace>

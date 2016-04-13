@@ -43,6 +43,7 @@ void ShowDetails(Returner x);
 void AddPassenger(Returner x);
 void RemovePassenger(Returner x);
 void AutoAssign(Returner x);
+void Pause();
 Returner loadFile();
 
 void main()
@@ -56,20 +57,31 @@ void main()
 		printf("Please select an option:\n1: print map of seats\n2: print seat details\n3: add a passenger\n4: remove a passenger\n5: Autoassign a seat\n6: reset seats\n0: exit program\n");
 		if (scanf("%d", &menu))
 		{
-			if (menu == 0)
-				break;
-			else if (menu == 1)
+			switch (menu)
+			{
+			case 0:
+				return;
+			case 1:
 				ShowSeats(x);
-			else if (menu == 2)
+				Pause();
+				break;
+			case 2:
 				ShowDetails(x);
-			else if (menu == 3)
+				Pause();
+				break;
+			case 3:
 				AddPassenger(x);
-			else if (menu == 4)
+				break;
+			case 4:
 				RemovePassenger(x);
-			else if (menu == 5)
+				break;
+			case 5:
 				AutoAssign(x);
-			else if (menu == 6)
+				break;
+			case 6:
 				Reset(x);
+				break;
+			}
 		}
 	}
 }
@@ -86,7 +98,7 @@ Returner loadFile() // loads the file and returns it as the seatmap struct
 	std::ifstream inStream;
 	try
 	{
-		inStream.open("../default.txt");
+		inStream.open("default.txt");
 		if (inStream)
 		{
 			std::getline(inStream, temp); // get seat row length from the first line
@@ -99,24 +111,23 @@ Returner loadFile() // loads the file and returns it as the seatmap struct
 				seats[i] = new Seat[seatColumn]; // initialise the columns
 			}
 
-			while (std::getline(inStream, temp))
+			for (int i = 0; i < seatRow; i++)
 			{
-				std::getline(inStream, temp); // gets the next line for processing
-				for(unsigned int i = 0; i < temp.size()-1; i++)
+				for(int j = 0; j < seatColumn; j++)
+				{
+				std::getline(inStream, temp);
+				std::stringstream ss(temp); // gets the next line for processing
+				/*for(unsigned int i = 0; i < ss; i++)
 				{
 					if(temp[i, i+1] == ' ') // detects a space
 					{
 						name = temp[0,i]; // everything up to the space is a name!
 						type = temp[i+1,i+2]; // therefore after the space is the seat type
 					}
-				}
-				for(unsigned int i = 0; i <= seatRow; i++)
-				{
-					for(unsigned int j = 0; j <= seatColumn; j++)
-					{
-						seats[i][j].setName(name); // set the name(if exists) to the seat
-						seats[i][j].setType(type); // set the seat type (should exist!)
-					}
+				}*/
+				ss >> name >> type;
+				seats[i][j].setName(name); // set the name(if exists) to the seat
+				seats[i][j].setType(type); // set the seat type (should exist!)
 				}
 			}
 			inStream.close();
@@ -198,15 +209,17 @@ void AddPassenger(Returner x) // assigns a selected seat
 	ShowDetails(x);
 	while(true)
 	{
-		printf("Please enter an seat column to add.\n");
+		printf("Please enter an seat row to add.\n");
 		if (scanf("%d", &tempc))
 		{
+			if(tempc < 0 || tempc > x.row)
+				break;
 			printf("Please enter an seat column to add.\n");
 			if (scanf("%d", &tempr))
 			{
-				if (tempc < 0 || tempr < 0)
+				if (tempr < 0 || tempr > x.column)
 					break;
-				else if (x.seat[tempc][tempr].getName().empty())
+				else if (!x.seat[tempc][tempr].getName().empty())
 					printf("That seat is taken, please select another or enter -1 to quit.\n");
 				else
 				{
@@ -268,4 +281,12 @@ void ClearScreen()
 		std::cout << "\033[2J\033[1;1H";
 	else//windows
 		system("cls");
+}
+
+void Pause()
+{
+	char x;
+	printf("Enter any key to continue: ");
+	scanf("%c", &x);
+	return;
 }
