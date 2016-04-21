@@ -1,8 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Aitbus", "Aitbus\Aitbus.vcxproj", "{BD3313CD-5ABD-40F3-BDE6-5D5DA869E77D}"
-EndProject
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Classes", "Classes\Classes.vcxproj", "{A253F7FF-AACC-440D-B8D4-4B2AA868921D}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AitBus2", "AitBus2\AitBus2.vcxproj", "{7D7FF43B-0D8E-462E-B2C5-2C977E523388}"
@@ -21,24 +21,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{BD3313CD-5ABD-40F3-BDE6-5D5DA869E77D}.Debug|Any CPU.ActiveCfg = Debug|Win32
-		{BD3313CD-5ABD-40F3-BDE6-5D5DA869E77D}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
-		{BD3313CD-5ABD-40F3-BDE6-5D5DA869E77D}.Debug|Mixed Platforms.Build.0 = Debug|Win32
-		{BD3313CD-5ABD-40F3-BDE6-5D5DA869E77D}.Debug|Win32.ActiveCfg = Debug|Win32
-		{BD3313CD-5ABD-40F3-BDE6-5D5DA869E77D}.Debug|Win32.Build.0 = Debug|Win32
-		{BD3313CD-5ABD-40F3-BDE6-5D5DA869E77D}.Debug|x64.ActiveCfg = Debug|x64
-		{BD3313CD-5ABD-40F3-BDE6-5D5DA869E77D}.Debug|x64.Build.0 = Debug|x64
-		{BD3313CD-5ABD-40F3-BDE6-5D5DA869E77D}.Debug|x86.ActiveCfg = Debug|Win32
-		{BD3313CD-5ABD-40F3-BDE6-5D5DA869E77D}.Debug|x86.Build.0 = Debug|Win32
-		{BD3313CD-5ABD-40F3-BDE6-5D5DA869E77D}.Release|Any CPU.ActiveCfg = Release|Win32
-		{BD3313CD-5ABD-40F3-BDE6-5D5DA869E77D}.Release|Mixed Platforms.ActiveCfg = Release|Win32
-		{BD3313CD-5ABD-40F3-BDE6-5D5DA869E77D}.Release|Mixed Platforms.Build.0 = Release|Win32
-		{BD3313CD-5ABD-40F3-BDE6-5D5DA869E77D}.Release|Win32.ActiveCfg = Release|Win32
-		{BD3313CD-5ABD-40F3-BDE6-5D5DA869E77D}.Release|Win32.Build.0 = Release|Win32
-		{BD3313CD-5ABD-40F3-BDE6-5D5DA869E77D}.Release|x64.ActiveCfg = Release|x64
-		{BD3313CD-5ABD-40F3-BDE6-5D5DA869E77D}.Release|x64.Build.0 = Release|x64
-		{BD3313CD-5ABD-40F3-BDE6-5D5DA869E77D}.Release|x86.ActiveCfg = Release|Win32
-		{BD3313CD-5ABD-40F3-BDE6-5D5DA869E77D}.Release|x86.Build.0 = Release|Win32
 		{A253F7FF-AACC-440D-B8D4-4B2AA868921D}.Debug|Any CPU.ActiveCfg = Debug|Win32
 		{A253F7FF-AACC-440D-B8D4-4B2AA868921D}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
 		{A253F7FF-AACC-440D-B8D4-4B2AA868921D}.Debug|Mixed Platforms.Build.0 = Debug|Win32

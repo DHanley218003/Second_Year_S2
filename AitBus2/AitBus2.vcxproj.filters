@@ -21,9 +21,15 @@
     <ClCompile Include="Seats.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ClearScreen.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Seats.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ClearScreen.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

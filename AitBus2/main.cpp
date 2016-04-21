@@ -11,13 +11,6 @@
  * Add customer seat type, e.g. Aductl/Child/Student/Disabled
  */
 
-//What os is used? Used to determine screen clear command
-#ifdef __linux__
-	bool os = true;
-#else
-	bool os = false;
-	#define _CRT_SECURE_NO_WARNINGS
-#endif
 #include <stdio.h>
 #include <sstream>
 #include <iostream>
@@ -25,6 +18,7 @@
 #include <fstream>
 #include "Seats.h"
 #include <vector>
+#include "ClearScreen.h"
 
 	
 struct Returner //used to transer the seatmap and array size
@@ -36,9 +30,10 @@ public:
 };
 
 //function prototypes
+char nth_letter(int n);
+void ChangeType(Returner x);
 void Reset(Returner x);
 void ShowSeats(Returner x);
-void ClearScreen();
 void ShowDetails(Returner x);
 void AddPassenger(Returner x);
 void RemovePassenger(Returner x);
@@ -46,7 +41,7 @@ void AutoAssign(Returner x);
 void Pause();
 Returner loadFile();
 
-void main()
+int main()
 {
 	int menu = -1;
 	Returner x = loadFile();
@@ -54,13 +49,14 @@ void main()
 	while(true)
 	{
 		ClearScreen();
-		printf("Please select an option:\n1: print map of seats\n2: print seat details\n3: add a passenger\n4: remove a passenger\n5: Autoassign a seat\n6: reset seats\n0: exit program\n");
-		if (scanf("%d", &menu))
+		std::cout << "Please select an option:\n1: print map of seats\n2: print seat details\n3: add a passenger\n4: remove a passenger\n5: Autoassign a seat\n6: reset seats\n7: Change seat type\n0: exit program" << std::endl;
+		std::cin >> menu;
+		if (std::cin)
 		{
 			switch (menu)
 			{
 			case 0:
-				return;
+				return 0;
 			case 1:
 				ShowSeats(x);
 				Pause();
@@ -81,9 +77,15 @@ void main()
 			case 6:
 				Reset(x);
 				break;
+			case 7:
+				ChangeType(x);
+				break;
 			}
 		}
+		else
+			std::cout << "Please enter a number!" << std::endl;
 	}
+	return 0;
 }
 
 
@@ -99,7 +101,7 @@ Returner loadFile() // loads the file and returns it as the seatmap struct
 	try
 	{
 		inStream.open("default.txt");
-		if (inStream)
+		if (inStream.is_open())
 		{
 			std::getline(inStream, temp); // get seat row length from the first line
 			seatRow = atoi(temp.c_str());
@@ -115,19 +117,19 @@ Returner loadFile() // loads the file and returns it as the seatmap struct
 			{
 				for(int j = 0; j < seatColumn; j++)
 				{
-				std::getline(inStream, temp);
-				std::stringstream ss(temp); // gets the next line for processing
-				/*for(unsigned int i = 0; i < ss; i++)
-				{
-					if(temp[i, i+1] == ' ') // detects a space
+					temp = "";
+					std::getline(inStream, temp);
+					std::istringstream ss(temp); // gets the next line for processing
+					if (!(ss >> name >> type))
 					{
-						name = temp[0,i]; // everything up to the space is a name!
-						type = temp[i+1,i+2]; // therefore after the space is the seat type
+						seats[i][j].setName("");
+						seats[i][j].setType('X');
 					}
-				}*/
-				ss >> name >> type;
-				seats[i][j].setName(name); // set the name(if exists) to the seat
-				seats[i][j].setType(type); // set the seat type (should exist!)
+					else
+					{
+						seats[i][j].setName(name); // set the name(if exists) to the seat
+						seats[i][j].setType(type); // set the seat type (should exist!)
+					}
 				}
 			}
 			inStream.close();
@@ -157,48 +159,53 @@ void AutoAssign(Returner x) //Finds the first free seat and assigns it
 	{
 		for(unsigned int j = 0; j < x.column; j++)
 		{
-			if (x.seat[i][j].getName().empty())
+			if (x.seat[i][j].getName().empty() && x.seat[i][j].getType() != 'X')
 			{
-				printf("Please enter your full name: ");
+				std::cout << "Please enter your full name: ";
 				std::string y;
-				scanf("%s", &y);
+				std::cin >> y;
 				x.seat[i][j].setName(y);
 				return;
 			}
 		}
 	}
+	std::cout << "No free seats found!" << std::endl;
 }
 
 void RemovePassenger(Returner x) // unassigns a selected seat
 {
 	int tempc, tempr;
-	ShowDetails(x);
-	while(true)
+	ShowSeats(x);
+	while (true)
 	{
-		printf("Please enter an seat column to remove.\n");
-		if (scanf("%d", &tempc))
+		std::cout << "Please enter an seat row to remove: ";
+		std::cin >> tempc;
+		if (std::cin)
 		{
-			printf("Please enter an seat column to remove.\n");
-			if (scanf("%d", &tempr))
+			if (tempc < 0 || tempc > x.row)
+				break;
+			std::cout << "Please enter an seat column to remove: ";
+			std::cin >> tempr;
+			if (std::cin)
 			{
 				if (tempc < 0 || tempr < 0)
 					break;
 				else if (x.seat[tempc][tempr].getName().empty())
-					printf("That seat is empty, please select another or enter -1 to quit.\n");
+					std::cout << "That seat is empty, please enter another seat number or enter -1 to quit." << std::endl;
 				else
 				{
 					x.seat[tempc][tempr].setName("");
-					printf("Seat removed! Please enter another seat number or enter -1 to quit.\n");
+					std::cout << "Seat removed! Please enter another seat number or enter -1 to quit." << std::endl;
 				}
 			}
 			else
 			{
-				printf("Please enter a number!");
+				std::cout << "Please enter a number!" << std::endl;
 			}
 		}
 		else
 		{
-			printf("Please enter a number!");
+			std::cout << "Please enter a number!" << std::endl;
 		}
 	}
 }
@@ -206,42 +213,85 @@ void RemovePassenger(Returner x) // unassigns a selected seat
 void AddPassenger(Returner x) // assigns a selected seat
 {
 	int tempc, tempr;
-	ShowDetails(x);
+	ShowSeats(x);
 	while(true)
 	{
-		printf("Please enter an seat row to add.\n");
-		if (scanf("%d", &tempc))
+		std::cout << "Please enter an seat row to add: ";
+		std::cin >> tempc;
+		if (std::cin)
 		{
 			if(tempc < 0 || tempc > x.row)
 				break;
-			printf("Please enter an seat column to add.\n");
-			if (scanf("%d", &tempr))
+			std::cout << "Please enter an seat column to add: ";
+			std::cin >> tempr;
+			if (std::cin)
 			{
 				if (tempr < 0 || tempr > x.column)
 					break;
 				else if (!x.seat[tempc][tempr].getName().empty())
-					printf("That seat is taken, please select another or enter -1 to quit.\n");
+					std::cout << "That seat is taken, please enter another seat number or enter -1 to quit." << std::endl;
 				else
 				{
-					printf("Please enter your full name: ");
+					std::cout << "Please enter your full name: ";
 					std::string y;
-					scanf("%s", &y);
+					std::cin >> y;
 					x.seat[tempc][tempr].setName(y);
-					printf("Seat added! Please enter another seat number or enter -1 to quit.\n");
+					std::cout << "Seat added! Please enter another seat number or enter -1 to quit." << std::endl;
 				}
 			}
 			else
 			{
-				printf("Please enter a number!");
+				std::cout << "Please enter a number!" << std::endl;
 			}
 		}
 		else
 		{
-			printf("Please enter a number!");
+			std::cout << "Please enter a number!" << std::endl;
 		}
 	}
 }
 
+void ChangeType(Returner x) // Changes the seat type
+{
+	int tempc, tempr;
+	ShowSeats(x);
+	while (true)
+	{
+		std::cout << "Please enter an seat row to modify: ";
+		std::cin >> tempc;
+		if (std::cin)
+		{
+			if (tempc < 0 || tempc > x.row)
+				break;
+			std::cout << "Please enter an seat column to modify: ";
+			std::cin >> tempr;
+			if (std::cin)
+			{
+				if (tempr < 0 || tempr > x.column)
+					break;
+				else
+				{
+					std::cout << "E = economy B = business F = first class D = disabled C = child A = adult S = student X = no seat" << std::endl;
+					std::cout << "Please enter the seat type: " << std::endl;
+					char y;
+					std::cin >> y;
+					if (x.seat[tempc][tempr].setType(y))
+						std::cout << "Seat modified! Please enter another seat number or enter -1 to quit." << std::endl;
+					else
+						std::cout << "Invalid seat type! Please try again or enter -1 to quit." << std::endl;
+				}
+			}
+			else
+			{
+				std::cout << "Please enter a number!" << std::endl;
+			}
+		}
+		else
+		{
+			std::cout << "Please enter a number!" << std::endl;
+		}
+	}
+}
 void ShowDetails(Returner x) // shows a detailed list of the seats
 {
 	ClearScreen();
@@ -249,15 +299,19 @@ void ShowDetails(Returner x) // shows a detailed list of the seats
 	{
 		for(unsigned int j = 0; j < x.column;j++)
 		{
-			printf("Name: %s Type: %c", x.seat[i][j].getName(), x.seat[i][j].getType());
+			if (x.seat[i][j].getType() == 'X')
+				std::cout << "No seat" << std::endl;
+			else if(!x.seat[i][j].getName().empty())
+				std::cout << "Name: " << x.seat[i][j].getName() << " Type: " << x.seat[i][j].getType() << std::endl;
+			else
+				std::cout << "Empty " << " Type: " << x.seat[i][j].getType() << std::endl;
 		}
 	}
-	std::cin;//rather than system("pause");, which would crash in linux
 }
 
 void Reset(Returner x)
 {
-	// Resets 2d array of: seat number, reservation flag, seat class(0,1,2)
+	// Sets all names as "", effectively unreserving seats.
 	for(unsigned int i = 0; i < x.row;i++)
 	{
 		for(unsigned int j = 0; j < x.column;j++)
@@ -265,28 +319,36 @@ void Reset(Returner x)
 			x.seat[i][j].setName("");
 		}
 	}
-	printf("Seats reset.\n");
+	std::cout << "Seats reset!" << std::endl;
 }
 
 void ShowSeats(Returner x)
 {
 	ClearScreen();
-	
-	std::cin;//rather than system("pause");, which would crash in linux
-}
-
-void ClearScreen()
-{
-	if(os)//if linux
-		std::cout << "\033[2J\033[1;1H";
-	else//windows
-		system("cls");
+	for (unsigned int i = 0; i < x.row; i++)
+	{
+		for (unsigned int j = 0; j < x.column; j++)
+		{
+			if (x.seat[i][j].getType() == 'X')
+				std::cout << " X  " << ' ';
+			else if (!x.seat[i][j].getName().empty())
+				std::cout << '[' << i << nth_letter(j) << ']' << ' ';
+		}
+		std::cout << std::endl;
+	}
 }
 
 void Pause()
 {
-	char x;
-	printf("Enter any key to continue: ");
-	scanf("%c", &x);
+	std::cout << "Press any key to continue!" << std::endl;
+	std::cin.sync();
+	std::cin.get();
 	return;
+}
+
+char nth_letter(int n)
+{
+	if (!(n >= 0) && !(n <= 26))
+		return 'X';
+	return "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[n];
 }

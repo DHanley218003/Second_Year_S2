@@ -8,7 +8,7 @@ void Seat::setName(std::string x) // takes in passenger name and sets it
 
 bool Seat::setType(char x) // takes in a capital letter to set as a seat type, returns true if correct letter was inputted
 	{
-		if (x == 'E' || x == 'B' || x == 'F' || x == 'D' || x == 'X') // Economy, Business, First class, Disabled, No seat
+		if (x == 'E' || x == 'B' || x == 'F' || x == 'D' || x == 'C' || x == 'A' || x == 'S' || x == 'X') // Economy, Business, First class, Disabled, Child, Adult, Student, No seat
 		{
 			type = x;
 			return true;

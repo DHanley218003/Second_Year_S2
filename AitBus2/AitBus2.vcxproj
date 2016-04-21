@@ -14,10 +14,12 @@
     <Text Include="default.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ClearScreen.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Seats.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ClearScreen.h" />
     <ClInclude Include="Seats.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
